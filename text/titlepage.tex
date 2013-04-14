@@ -1,0 +1,56 @@
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+
+\begin{titlepage}
+\begin{changemargin}{-2cm}{-2cm}
+
+\begin{center}
+
+
+% Upper part of the page
+
+\textsc{\large Санкт-Петербургский Государственный Университет \\[0.2cm]
+Математико-Механический факультет\\
+Кафедра системного программирования\\[1.5cm]}
+\textsc{\large 
+Выпускная квалификационная работа на получение степени
+бакалавра
+}\\[2.5cm]
+
+
+{ \huge \bfseries 
+  Предварительный отчет (тема не сформировалась)
+}
+\\[2.5cm]
+
+
+% Author and supervisor
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Автор:}\\
+Александр Улитин
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Научный руководитель:} \\
+А. Т. Вахитов
+\end{flushright}
+\end{minipage}
+
+\vfill
+{\large 24 мая 2012}
+
+\end{center}
+
+\end{changemargin}
+\end{titlepage}

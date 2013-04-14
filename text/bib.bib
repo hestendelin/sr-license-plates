@@ -1,0 +1,209 @@
+% This file was created with JabRef 2.9.
+% Encoding: KOI8_R
+
+@TECHREPORT{AramDanielyan2012,
+  author = {Aram Danielyan, Vladimir Katkovnik, Karen Egiazarian},
+  title = {BM3D frames and variational image deblurring},
+  institution = {IEEE},
+  year = {2012},
+  owner = {Sa},
+  quality = {1},
+  timestamp = {2012.12.23}
+}
+
+@TECHREPORT{DavidCapel2003,
+  author = {David Capel, Andrew Zisserman},
+  title = {Computer Vision Applied to Super Resolution},
+  institution = {IEEE SIGNAL PROCESSING MAGAZINE},
+  year = {2003},
+  owner = {Sa},
+  quality = {1},
+  timestamp = {2012.12.23}
+}
+
+@ARTICLE{ParkS.C.2003,
+  author = {Park S. C., Park M. K., Kang M. G.},
+  title = {Super-resolution image reconstruction: a technical overview},
+  journal = {IEEE Signal Processing Magazine},
+  year = {2003},
+  volume = {20},
+  pages = {21-36},
+  owner = {Sa},
+  quality = {1},
+  timestamp = {2012.12.23}
+}
+
+@TECHREPORT{TianJ.2011,
+  author = {Tian J., Ma K.-K.},
+  title = {A survey on super-resolution imaging. Signal, Image and Video Processing},
+  year = {2011},
+  owner = {Sa},
+  quality = {1},
+  timestamp = {2012.12.23}
+}
+
+@TECHREPORT{Katkovnik2012,
+  author = {V. Katkovnik, V. Passichenko, A. Vakhitov, Y. Zemlyanski},
+  title = {Variational Super-Resolution},
+  year = {2012},
+  review = {Variational Super-Resolution
+	
+	
+	
+	V. Katkovnik,V. Passichenko, A. Vakhitov, Y. Zemlyanski
+	
+	
+	
+	November 25, 2012
+	
+	
+	
+	1 Introduction
+	
+	
+	
+	In [1] it was proposed to use variational approach to super-resolution
+	problem. Here we
+	
+	
+	explain in details the results of implementation of some ideas from
+	[1]. The paper is
+	
+	
+	divided into two sections: first one devoted to spectrum-domain restoration
+	and second
+	
+	
+	one devoted to image domain super resolution, as it was described
+	in [2]. We show that
+	
+	
+	the new variational approach is a generalization of the approach proposed
+	in [2]. The
+	
+	
+	experimental results justify that the new variational approach (as
+	it was theoretically
+	
+	
+	predicted) adds robustness to additional noise to methods proposed
+	in [2].
+	
+	
+	
+	2 Spectrum restoration
+	
+	
+	
+	2.1 Theoretical derivations
+	
+	
+	
+	The variatoional SR algorithm is formulated as follows [1].
+	
+	
+	Imaging model:
+	
+	
+	
+	y = Bx+ ?,
+	
+	
+	
+	y ? Rm is observation, x ? Rn is unknown image, B is linear operator,
+	 is noise, ?
+	
+	
+	is noise variance.
+	
+	
+	
+	1. ( ?0
+	
+	
+	?2
+	
+	
+	BBT + Im?m)ut+1/2 =
+	
+	
+	
+	?0
+	
+	
+	?2
+	
+	
+	BBT y +B ·??t
+	
+	
+	
+	2. xt+1 = ??t ? ?0?2BT (ut+1/2 ? y) + (BT (BBT )?1B ? In?n)?t??t
+	
+	
+	3. ?t+1 = Th?{?xt+1}
+	
+	
+	
+	Here ?t denotes sparse representation of x, ? and ? are transforms
+	between image
+	
+	
+	domain and sparse representations of x, ?t is artificially generated
+	random excitation.
+	
+	
+	
+	In case of spectrum restoration, y is an upper left part of the DFT
+	transform of
+	
+	
+	initial image x. We consider case m = n/2. So, operator B = DF where
+	F does FFT
+	
+	
+	and D does selection of the upper-left submatrix. In this case, BBT
+	= DFF TDT =
+	
+	
+	DDT = Im?m, so the algorithm can be simplified, denoting k = ?0?2
+	:
+	
+	
+	
+	1. ut+1/2 =
+	
+	
+	k
+	
+	
+	k+1y +
+	
+	
+	
+	1
+	
+	
+	k+1B ·??t
+	
+	
+	
+	1}
+}
+
+@MASTERSTHESIS{Zemlyansky2012,
+  author = {Юрий Андреевич Землянский},
+  title = {Исследование вариационного подхода в задаче повышения разрешения
+	изображения},
+  school = {СПбГУ Математико-Механический факультет},
+  year = {2012},
+  owner = {Sa},
+  quality = {1},
+  timestamp = {2012.12.23}
+}
+
+@comment{jabref-meta: selector_school:СПбГУ Математико-Механический фа
+культет;}
+
+@comment{jabref-meta: selector_type:курсовая работа;}
+
