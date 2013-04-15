@@ -1,23 +1,22 @@
-
-clc;
 img = im2double(rgb2gray(imread('test.png')));
 result_figure = figure;
 % subplot(2,2,1); title('source'); imshow(img);
 img = sampleimg(img, 0.4, 0.1);
 
 
-gaussian_sigma  = 0.33;
+if (~exist('gaussian_sigma')) gaussian_sigma = 0.33;
+if (~exist('noise_level'))    noise_level    = 5/255;
+
+if (~exist('lambda'))         lambda         = 0.5;
+if (~exist('gamma'))          gamma          = 300;
+if (~exist('gamma_target'))   gamma_target   = 10;
+if (~exist('k'))              k              = 0.95;
+if (~exist('alpha'))          alpha          = 0.3;
+if (~exist('epsilon'))        epsilon        = 0.001;
+
 gaussian_kernel = fspecial('gaussian', 3, gaussian_sigma);
-noise_level     = 5/255;
 
-lambda          = 0.5;
-gamma           = 300;
-gamma_target    = 10;
-k               = 0.95;
-alpha           = 0.3;
-epsilon         = 0.001;
-
-scale           = 2;
+scale = 2;
 
 warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
 % get lr images from hr
@@ -74,8 +73,16 @@ while cont
 
     cont = ~ (nor < epsilon && gamma == gamma_target);
     X = upsampled;
-    if (nor > 100)
-        error('Diverge');
+    if (nor > 100 || n_step > 100)
+        disp('force exit')
+        cont = false;
     end
+    % if (nor > 100)
+    %     error('Diverge');
+    % end
 end
+
+fname = ['out/nor' num2str(nor) '_l' num2str(lambda) '_g' num2str(gamma) '_eps' num2str(epsilon) '.png']
+saveas(result_figure, fname, 'png')
+close(result_figure);
 
