@@ -1,12 +1,13 @@
 
 % run in batch
 
-gammas = 0:0.1:3
-alphas = 0:0.1:3
+lambdas = 0:0.2:2;
+alphas = 0:0.125:0.5;
 
-for gamma in gammas
-    for alpha in alphas
-        main
-        clear
+
+for alpha = alphas
+    for lambda = lambdas
+    main
+        clearvars '*' -except -regexp gammas|alphas
     end
 end

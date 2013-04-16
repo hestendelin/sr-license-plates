@@ -4,15 +4,15 @@ result_figure = figure;
 img = sampleimg(img, 0.4, 0.1);
 
 
-if (~exist('gaussian_sigma')) gaussian_sigma = 0.33;
-if (~exist('noise_level'))    noise_level    = 5/255;
+if (~exist('gaussian_sigma', 'var')); gaussian_sigma = 0.33; end;
+if (~exist('noise_level', 'var'));    noise_level    = 5/255;end;
 
-if (~exist('lambda'))         lambda         = 0.5;
-if (~exist('gamma'))          gamma          = 300;
-if (~exist('gamma_target'))   gamma_target   = 10;
-if (~exist('k'))              k              = 0.95;
-if (~exist('alpha'))          alpha          = 0.3;
-if (~exist('epsilon'))        epsilon        = 0.001;
+if (~exist('lambda', 'var'));         lambda         = 0.5;  end;
+if (~exist('gamma','var'));           gamma          = 300;  end;
+if (~exist('gamma_target', 'var'));   gamma_target   = 10;   end;
+if (~exist('k', 'var'));              k              = 0.95; end;
+if (~exist('alpha', 'var'));          alpha          = 0.3;  end;
+if (~exist('epsilon', 'var'));        epsilon        = 0.001;end;
 
 gaussian_kernel = fspecial('gaussian', 3, gaussian_sigma);
 
@@ -73,7 +73,7 @@ while cont
 
     cont = ~ (nor < epsilon && gamma == gamma_target);
     X = upsampled;
-    if (nor > 100 || n_step > 100)
+    if (nor > 100 || n_step > 50)
         disp('force exit')
         cont = false;
     end
@@ -82,7 +82,6 @@ while cont
     % end
 end
 
-fname = ['out/nor' num2str(nor) '_l' num2str(lambda) '_g' num2str(gamma) '_eps' num2str(epsilon) '.png']
+fname = ['out/nor' num2str(nor) '_l' num2str(lambda) '_a' num2str(alpha) '.png'];
 saveas(result_figure, fname, 'png')
 close(result_figure);
-
