@@ -1,0 +1,87 @@
+\documentclass[russian,english,hyperref=unicode]{beamer}
+
+\usepackage{cmap}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[russian,english]{babel}
+\usepackage{mathptmx}
+\usepackage{multimedia}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{amssymb}
+
+%LST LISTINGS
+\usepackage{listings}
+
+\usepackage{color}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\lstset{
+  showstringspaces=false,
+  commentstyle=\color{gray}\upshape,
+  basicstyle=\footnotesize,
+  columns=flexible,
+  frame=single,
+  breaklines=true,
+  frame=multipled
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,version,type}% list your attributes here
+}
+
+
+\usepackage[absolute,overlay]{textpos}
+
+%\usetheme{Darmstadt}...
+\usetheme{default}
+\usecolortheme{dove}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}{}
+
+ % BigIMgH
+\newcommand<>{\bigimgh}[1]{
+        {
+                \begin{frame}
+                        \begin{tikzpicture}[remember picture,overlay]
+                                \node[at=(current page.center)] {
+                                        \includegraphics[height=\paperheight]{#1}
+                                };
+                        \end{tikzpicture}
+                \end{frame}
+        }
+}
+ % BigIMg
+\newcommand<>{\bigimg}[1]{
+        {
+                \begin{frame}
+                        \begin{tikzpicture}[remember picture,overlay]
+                                \node[at=(current page.center)] {
+                                        \includegraphics[width=\paperwidth]{#1}
+                                };
+                        \end{tikzpicture}
+                \end{frame}
+        }
+}
+
+
+\author{Александр Улитин, 461 гр.}
+\begin{document}
+\selectlanguage{russian}
+
+\input{ compare_2sr_for_licence_platex.tex }
+
+\end{document}

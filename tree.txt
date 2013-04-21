@@ -1,0 +1,37 @@
+DIPLOM
+│
+├───fastsr                  Алгоритм №2
+│   └───out
+├───matlab                  Общие файлы
+│   ├───result
+│   └───result_one
+├───plates                  Изображения номеров
+│   ├───norm100               нормированные до ширины 100
+│   ├───norm40                                     ...40
+│   ├───norm50                                     ...50
+│   ├───norm70                                     ...70
+│   └───raw                   исходные jpeg
+├───presentation            презентация
+│   └───content               изображения для презентации
+│       └───imgs              часть результатов тут
+├───ScSR                    алгоритм №1
+│   ├───Data
+│   │   ├───Training
+│   │   ├───Training_clear
+│   │   └───Training_std
+│   ├───Dictionary
+│   ├───RegularizedSC
+│   │   └───sc2
+│   │       └───nrf
+│   ├───Results
+│   └───Training
+├───superResolution3        Алгоритм №3, не здоровский, закрытые исходники
+├───text                    Текст диплома.
+│   └───svg
+└───training                Символы для тренировки. не использовались
+    ├───parts_hi
+    ├───parts_lo
+    ├───parts_raw
+    ├───symbols_hi
+    ├───symbols_lo
+    └───symbols_raw

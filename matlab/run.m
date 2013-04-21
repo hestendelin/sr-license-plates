@@ -1,5 +1,5 @@
 clc; clear ;
-directory = 'plates';
+directory = '../plates';
 
 img_names = dir(fullfile(directory,'*.bmp'))';
 
