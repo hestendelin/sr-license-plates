@@ -71,7 +71,7 @@ while cont
     
     gamma_plot(end + 1) = gamma; 
     nor_plot(end + 1) = nor;
-    pnsr_plot(end + 1) = metrics.PSNR(img_source, X);
+    pnsr_plot(end + 1) = PSNR(img_source, X);
     x_values = 1:n_step;
     subplot(2,2,3);title('NORMA');plot(x_values, nor_plot);
     

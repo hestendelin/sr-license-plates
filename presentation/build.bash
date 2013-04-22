@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="/home/soso/.latextemp"
+dir="/home/d/.latextemp"
 FILE="template"
 
 pdflatex -output-directory=$dir -interaction=nonstopmode "$FILE.tex"
