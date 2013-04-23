@@ -1,33 +1,37 @@
+if (exist('result_figure', 'var'))
+    %close(result_figure);
+end
 clc; clear;
 
 img_source = im2double(rgb2gray(imread('test.png')));
 result_figure = figure;
 % subplot(2,2,1); title('source'); imshow(img);
-img = imresize(img_source, 0.5,'nearest');
+%img = imresize(img_source, 0.5,'nearest');
 
 if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.33  ;end;
-if (~exist('noise_level', 'var'))    ; noise_level    = 0     ;end;
+if (~exist('noise_level', 'var'))    ; noise_level    = 0.1     ;end;
 
-if (~exist('lambda', 'var'))         ; lambda         = 0.5   ;end;
+if (~exist('lambda', 'var'))         ; lambda         = 0.1   ;end;
 if (~exist('gamma','var'))           ; gamma          = 300   ;end;
 if (~exist('gamma_target', 'var'))   ; gamma_target   = 10    ;end;
 if (~exist('k', 'var'))              ; k              = 0.95  ;end;
-if (~exist('alpha', 'var'))          ; alpha          = 0.3   ;end;
+if (~exist('alpha', 'var'))          ; alpha          = 0.003   ;end;
 if (~exist('epsilon', 'var'))        ; epsilon        = 0.001 ;end;
 
 gaussian_kernel = fspecial('gaussian', 3, gaussian_sigma);
 
-img = 255 * img;
+%img = 255 * img;
 scale = 2;
 
 warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
+%warps = [0 0; 0 0; 0 0; 0 0];
 % get lr images from hr
 
 imgs = cell(size(warps,1),1);
 for war = 1:size(warps,1)
-    shifted = shift(img,warps(war,1),warps(war,2));
+    shifted = shift(img_source,warps(war,1),warps(war,2));    
+    shifted = imresize(shifted, 1/scale, 'bilinear', 'AntiAliasing',0)+noise_level*randn(size(shifted)/2);
     imgs{war} = shifted;
-    shifted = sampleimg(shifted, 1/scale, noise_level);
     imwrite(shifted, ['out\lr_' num2str(war) '.png']);
 end
 lr_size = size(imgs{1});
@@ -36,9 +40,10 @@ hr_size = lr_size * scale;
 %% main
 X = zeros(hr_size);
 for i = 1:length(imgs)
-    X = X + shift(sampleimg(imgs{i}, scale, 0),-warps(i,1),-warps(i,2));
+    X = X + shift(imresize(imgs{i}, scale, 'nearest'),-warps(i,1),-warps(i,2));
 end
 X = X / length(imgs);
+init = X;
 
 [dx, dy] = gradient(X);
 gamma = max([max(dx) max(dy)]);
@@ -47,18 +52,19 @@ n_step = 1;
 gamma_plot = []; nor_plot = []; pnsr_plot = [];
 
 subplot(2,2,1);
-imshow(X);
+imshow(img_source);
 % imwrite(X,'combined.png')
-
+%warps = [0 0;1 -0.9;-1.1, 1.1; 1,0.9; -1.1,-1];
 while cont
     upsampled = zeros(hr_size);
     for im = 1:length(imgs)
-        x_lr = sampleimg(shift(X,warps(im,1),warps(im,2)), 1/scale, noise_level);
+        x_lr = imresize(shift(X,warps(im,1),warps(im,2)), 1/scale, 'bilinear', 'AntiAliasing', false);
         diff_lr = x_lr - imgs{im};
-        upsampled = upsampled + shift(sampleimg(diff_lr, scale, 0), warps(im,1),warps(im,2));
+        upsampled = upsampled + shift(imresize(diff_lr, scale, 'nearest'), -warps(im,1),-warps(im,2));
     end
 
-    upsampled = X - alpha * (upsampled*noise_level + lambda * G(X, gamma) );
+    upsampled = X - alpha * (upsampled*1/(noise_level +1)+ lambda * G(X, gamma) );
+%    alpha = alpha*0.99;
     nor = norm(upsampled - X);
 
     disp(['iteration ' num2str(n_step) ', gamma=' num2str(gamma) ',norm=' num2str(nor)]);
@@ -66,8 +72,8 @@ while cont
         gamma = max(gamma_target, k*gamma);
     end
     % plot
-    subplot(2,2,2);title('current');imshow(uint8(X));
-    X(X<0)=0; X(X>1)=1;
+    subplot(2,2,2);title('current');imshow(uint8(255*X));
+    %X(X<0)=0; X(X>1)=1;
     
     gamma_plot(end + 1) = gamma; 
     nor_plot(end + 1) = nor;
@@ -83,7 +89,7 @@ while cont
 
     cont = ~ (nor < epsilon && gamma == gamma_target);
     X = upsampled;
-    if (nor > 500 || n_step > 50)
+    if (nor > 5000 || n_step > 200)
         disp('force exit')
         cont = false;
     end
