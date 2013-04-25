@@ -1,22 +1,27 @@
-if (exist('result_figure', 'var'))
-    %close(result_figure);
+if (~exist('is_batch','var')) 
+    close all;clc; clear;
 end
-clc; clear;
 
-img_source = im2double(rgb2gray(imread('test.png')));
+
 result_figure = figure;
 % subplot(2,2,1); title('source'); imshow(img);
 %img = imresize(img_source, 0.5,'nearest');
 
-if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.33  ;end;
-if (~exist('noise_level', 'var'))    ; noise_level    = 0.1     ;end;
+if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.33      ;end;
+if (~exist('noise_level', 'var'))    ; noise_level    = 0         ;end;
 
-if (~exist('lambda', 'var'))         ; lambda         = 0.1   ;end;
-if (~exist('gamma','var'))           ; gamma          = 300   ;end;
-if (~exist('gamma_target', 'var'))   ; gamma_target   = 10    ;end;
-if (~exist('k', 'var'))              ; k              = 0.95  ;end;
-if (~exist('alpha', 'var'))          ; alpha          = 0.003   ;end;
-if (~exist('epsilon', 'var'))        ; epsilon        = 0.001 ;end;
+if (~exist('lambda', 'var'))         ; lambda         = 0.1       ;end;
+if (~exist('gamma','var'))           ; gamma          = 300       ;end;
+if (~exist('gamma_target', 'var'))   ; gamma_target   = 10        ;end;
+if (~exist('k', 'var'))              ; k              = 0.95      ;end;
+if (~exist('alpha', 'var'))          ; alpha          = 0.03      ;end;
+if (~exist('epsilon', 'var'))        ; epsilon        = 0.005     ;end;
+if (~exist('file', 'var'))    ; file    = '../plates/norm100/001.png';end;
+
+
+img_source = im2double(rgb2gray(imread(file)));
+% увеличиваем границы нечетного изображения
+img_source = padarray(img_source,mod(size(img_source),2),'replicate','pre');
 
 gaussian_kernel = fspecial('gaussian', 3, gaussian_sigma);
 
@@ -30,9 +35,10 @@ warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
 imgs = cell(size(warps,1),1);
 for war = 1:size(warps,1)
     shifted = shift(img_source,warps(war,1),warps(war,2));    
-    shifted = imresize(shifted, 1/scale, 'bilinear', 'AntiAliasing',0)+noise_level*randn(size(shifted)/2);
+    shifted = imresize(shifted, 1/scale, 'bilinear', 'AntiAliasing',0);
+    shifted = shifted + noise_level*randn(size(shifted));
     imgs{war} = shifted;
-    imwrite(shifted, ['out\lr_' num2str(war) '.png']);
+    %imwrite(shifted, ['out\lr_' num2str(war) '.png']);
 end
 lr_size = size(imgs{1});
 hr_size = lr_size * scale;
@@ -44,15 +50,18 @@ for i = 1:length(imgs)
 end
 X = X / length(imgs);
 init = X;
+%[a,b,c] = fileparts(file);
+%
+%return;
 
 [dx, dy] = gradient(X);
 gamma = max([max(dx) max(dy)]);
 cont = true;
 n_step = 1;
-gamma_plot = []; nor_plot = []; pnsr_plot = [];
+gamma_plot = []; nor_plot = []; psnr_plot = [];
 
-subplot(2,2,1);
-imshow(img_source);
+subplot(2,2,1);imshow(X);title('Initial estimation');
+subplot(2,2,3);imshow(img_source);title('Original HR image');
 % imwrite(X,'combined.png')
 %warps = [0 0;1 -0.9;-1.1, 1.1; 1,0.9; -1.1,-1];
 while cont
@@ -72,16 +81,16 @@ while cont
         gamma = max(gamma_target, k*gamma);
     end
     % plot
-    subplot(2,2,2);title('current');imshow(uint8(255*X));
-    %X(X<0)=0; X(X>1)=1;
+    subplot(2,2,2);imshow(uint8(255*X));title('Current');
+    X(X<0)=0; X(X>1)=1;
     
     gamma_plot(end + 1) = gamma; 
     nor_plot(end + 1) = nor;
-    pnsr_plot(end + 1) = PSNR(img_source, X);
+    psnr_plot(end + 1) = PSNR(img_source, X);
     x_values = 1:n_step;
-    subplot(2,2,3);title('NORMA');plot(x_values, nor_plot);
+    %subplot(2,2,3);plot(x_values, nor_plot);title('NORMA');
     
-    subplot(2,2,4);title('PSNR');plot(x_values, pnsr_plot);
+    subplot(2,2,4);plot(x_values, psnr_plot);title('PSNR');
     ylabel('PNSR');xlabel('iteration');
     
     figure(result_figure);
@@ -98,6 +107,10 @@ while cont
     % end
 end
 
-fname = ['out/nor' num2str(nor) '_l' num2str(lambda) '_a' num2str(alpha) '.png'];
-saveas(result_figure, fname, 'png')
-%close(result_figure);
+if (exist('is_batch','var')) 
+    fname = ['out/nor' num2str(max(psnr_plot)-min(psnr_plot)) '_l' num2str(lambda) '_a' num2str(alpha) '.png'];
+    saveas(result_figure, fname, 'png')
+    save([fname '.mat'])
+    close(result_figure);
+end
+
