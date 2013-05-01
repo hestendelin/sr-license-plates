@@ -7,28 +7,29 @@ result_figure = figure;
 % subplot(2,2,1); title('source'); imshow(img);
 %img = imresize(img_source, 0.5,'nearest');
 
-if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.33      ;end;
-if (~exist('noise_level', 'var'))    ; noise_level    = 0         ;end;
+if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.4      ;end;
+if (~exist('noise_level', 'var'))    ; noise_level    = 0.03         ;end;
 
-if (~exist('lambda', 'var'))         ; lambda         = 0.1       ;end;
+if (~exist('lambda', 'var'))         ; lambda         = 0.2       ;end;
 if (~exist('gamma','var'))           ; gamma          = 300       ;end;
 if (~exist('gamma_target', 'var'))   ; gamma_target   = 10        ;end;
 if (~exist('k', 'var'))              ; k              = 0.95      ;end;
 if (~exist('alpha', 'var'))          ; alpha          = 0.03      ;end;
 if (~exist('epsilon', 'var'))        ; epsilon        = 0.005     ;end;
-if (~exist('file', 'var'))    ; file    = '../plates/norm100/001.png';end;
+if (~exist('file', 'var'))    ; file    = '../plates/norm70/003.png';end;
 
 
 img_source = im2double(rgb2gray(imread(file)));
 % увеличиваем границы нечетного изображения
 img_source = padarray(img_source,mod(size(img_source),2),'replicate','pre');
 
-gaussian_kernel = fspecial('gaussian', 3, gaussian_sigma);
+gaussian_kernel = fspecial('gaussian', ceil(gaussian_sigma*2)*2+1, gaussian_sigma);
 
 %img = 255 * img;
 scale = 2;
 
-warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
+warps = [1 -1;];
+%warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
 %warps = [0 0; 0 0; 0 0; 0 0];
 % get lr images from hr
 
@@ -36,6 +37,7 @@ imgs = cell(size(warps,1),1);
 for war = 1:size(warps,1)
     shifted = shift(img_source,warps(war,1),warps(war,2));    
     shifted = imresize(shifted, 1/scale, 'bilinear', 'AntiAliasing',0);
+    shifted = imfilter(shifted, gaussian_kernel);
     shifted = shifted + noise_level*randn(size(shifted));
     imgs{war} = shifted;
     %imwrite(shifted, ['out\lr_' num2str(war) '.png']);
@@ -67,7 +69,10 @@ subplot(2,2,3);imshow(img_source);title('Original HR image');
 while cont
     upsampled = zeros(hr_size);
     for im = 1:length(imgs)
-        x_lr = imresize(shift(X,warps(im,1),warps(im,2)), 1/scale, 'bilinear', 'AntiAliasing', false);
+        x_lr = shift(X,warps(im,1),warps(im,2));
+        % ???
+        x_lr = imfilter(x_lr, gaussian_kernel);
+        x_lr = imresize(x_lr, 1/scale, 'bilinear', 'AntiAliasing', false);
         diff_lr = x_lr - imgs{im};
         upsampled = upsampled + shift(imresize(diff_lr, scale, 'nearest'), -warps(im,1),-warps(im,2));
     end
