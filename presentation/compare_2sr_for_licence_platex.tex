@@ -1,4 +1,5 @@
-\title{ Сравнение подходов обучения на базе словаря и MAP к проблеме повышения разрешения на примере изображений автомобильных номеров }
+% \title{ Сравнение подходов обучения на базе словаря и MAP к проблеме повышения разрешения на примере изображений автомобильных номеров }
+\title{Повышение разрешения изображений автомобильных номеров}
 \author{
   \begin{tabular}[4cm]{rl}
  Автор:                & Улитин А.~А., 461 гр. \\
@@ -17,14 +18,24 @@
   \includegraphics[height=\textheight]{content/An_example_of_super_resolution_with_still_RAW_photo.jpg}
 \end{frame}
 
-\begin{frame}{PSNR}
-$${MSE} = \frac{1}{m\,n}\sum_{i=0}^{m-1}\sum_{j=0}^{n-1} [I(i,j) -
-K(i,j)]^2$$
+\begin{frame}{Почему это возможно}
+  Для повышения разрешения используется дополнительная информация
+  \begin{itemize}
+    \item знание параметров съемки (размытие, движение камеры~и~т.п.)
+    \item знание о типе снимаемого объекта (текст, лица, и т.п.)
+    \item использование нескольких изображей, снятых с разных ракурсов
+  \end{itemize}
+  которая влияет на конечное изображение
+\end{frame}
 
-The PSNR is defined as:
-$$
-\mathit{PSNR} &= 10 \cdot \log_{10} \left( \frac{\mathit{MAX}_I^2}{\mathit{MSE}} \right)
-$$
+\begin{frame}{PSNR}
+
+  $$ \mathrm{MSE}(\tilde{x},x) = \frac{1}{m\,n}\sum_{i=0}^{m-1}\sum_{j=0}^{n-1} [\tilde{x}(i,j) - x(i,j)]^2$$
+
+  И обозначим величину обратную ей и выраженную на логарифмической шкале как $\mathrm{PSNR}(\tilde{x},x)$.
+  $$ \mathrm{PSNR}(\tilde{x},x) &= 10 \cdot \log_{10} \left( \frac{\mathrm{MAX}_I^2}{\mathrm{MSE}(\tilde{x},x)} \right)
+  $$
+
 \end{frame}
 
 \begin{frame}{Постановка задачи}
@@ -42,17 +53,6 @@ $$
  Задача найти
  $$ \tilde{x} = \underset{\hat{x}}{\operatorname{argmax}}~  PSNR(\hat{x},x)$$
 \end{frame}
-
-\begin{frame}{Почему это возможно}
-  Для повышения разрешения используется дополнительная информация
-  \begin{itemize}
-    \item знание параметров съемки (размытие, движение камеры~и~т.п.)
-    \item знание о типе снимаемого объекта (текст, лица, и т.п.)
-    \item использование нескольких изображей, снятых с разных ракурсов
-  \end{itemize}
-  которая влияет на конечное изображение
-\end{frame}
-
 \section{Подходы}
 \begin{frame}{Сравниваемые подходы}
   \begin{itemize}
@@ -116,11 +116,13 @@ $$
   \includegraphics[width=\columnwidth]{content/sr2_two_images.pdf}
 \end{frame}
 
-\section{Выводы}
+\section{Итоги}
 
-\begin{frame}{Выводы}
+\begin{frame}{Итоги}
   \begin{itemize}
-    \item Оба алгоритма качествено повышают разрешения автомобильного
+
+    \item были исследованы и реализованы два подхода к задаче SR
+    \item Эксперименты показывают, что оба алгоритма качественно повышают разрешения автомобильного
       номера.
   \end{itemize}
 \end{frame}

@@ -1,0 +1,52 @@
+\documentclass[10pt,a4paper,russian,titlepage]{article}
+\usepackage[T2]{fontenc}
+\usepackage[utf8]{inputenc}
+\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{2}
+\usepackage{babel}
+\usepackage{setspace}
+\usepackage[numbers]{natbib}
+\onehalfspacing
+\usepackage[unicode=true,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=6,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfauthor={Александр Улитин}}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\pdfpageheight\paperheight
+\pdfpagewidth\paperwidth
+%
+% \DeclareRobustCommand{\cyrtext}{%
+%   \fontencoding{T2A}\selectfont\def\encodingdefault{T2A}}
+% \DeclareRobustCommand{\textcyr}[1]{\leavevmode{\cyrtext #1}}
+% \AtBeginDocument{\DeclareFontEncoding{T2A}{}{}}
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{indentfirst}
+\usepackage{footnote}
+\usepackage{comment}
+\usepackage{fancyhdr}
+% \pagestyle{fancy}
+% \rhead{ Улитин Александр, 461 гр. \\
+% Н. р. доц. Вахитов А. Т.}
+% \lhead{
+%  \parbox[b]{0.6\textwidth}{
+%   Повышение разрешения изображений автомобильных номеров.
+%  }
+% }
+% \setlength{\headsep}{3em}
+
+% \makeatother
+
+\begin{document}
+\input{titlepage.tex}
+\tableofcontents{}
+
+\newpage{}
+\input{text.tex}
+\end{document}
