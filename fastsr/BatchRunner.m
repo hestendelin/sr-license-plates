@@ -1,22 +1,30 @@
 close all;clc; clear;
 % run in batch
 
-lambdas = 0.2; %0:0.1:3;
-alphas = 0.03;
-is_batch = 1;
-psnr_sr2 = [];
-psnr_init = [];
+b_is_batch = 1;
 
-files = ls('../plates/norm100/*.png');
-files = files(1:16,:);
-for file = 1:size(files,1)
-    file = fullfile('../plates/norm100/',files(file,:));
-    for alpha = alphas
-        for lambda = lambdas
-            main
-            psnr_sr2(end+1) = max(psnr_plot);
-            psnr_init(end+1) = metrics.PSNR(init, img_source);
-            clearvars '*' -except -regexp lambdas?|alphas?|is_batch|psnr.*|files?
+b_lambdas = 0:0.05:0.4;
+b_alphas = 0.03;
+b_blurs   = 0.01:0.2:1.0;
+
+b_files = ls('../plates/norm50/*.png');
+b_files = b_files(2:2,:);
+
+%comment for hide
+b_hide_fig = 0;
+
+for b_file = 1:size(b_files,1)
+    for b_alpha = b_alphas
+        for b_lambda = b_lambdas
+            for b_blur = b_blurs
+                gaussian_sigma = b_blur;
+                alpha = b_alpha;
+                lambda = b_lambda;
+                file = fullfile('../plates/norm100/',b_files(b_file,:));
+                main
+
+                clearvars '*' -except -regexp b_.*
+            end
         end
     end
 end

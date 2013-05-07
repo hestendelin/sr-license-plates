@@ -1,9 +1,9 @@
-if (~exist('is_batch','var')) 
+if (~exist('b_is_batch','var')) 
     close all;clc; clear;
 end
 
 
-result_figure = figure;
+if (~exist('b_hide_fig','var')); result_figure = figure; end;
 % subplot(2,2,1); title('source'); imshow(img);
 %img = imresize(img_source, 0.5,'nearest');
 
@@ -14,7 +14,7 @@ if (~exist('lambda', 'var'))         ; lambda         = 0.2       ;end;
 if (~exist('gamma','var'))           ; gamma          = 300       ;end;
 if (~exist('gamma_target', 'var'))   ; gamma_target   = 10        ;end;
 if (~exist('k', 'var'))              ; k              = 0.95      ;end;
-if (~exist('alpha', 'var'))          ; alpha          = 0.03      ;end;
+if (~exist('alpha', 'var'))          ; alpha          = 0.07      ;end;
 if (~exist('epsilon', 'var'))        ; epsilon        = 0.005     ;end;
 if (~exist('file', 'var'))    ; file    = '../plates/norm70/003.png';end;
 
@@ -23,13 +23,14 @@ img_source = im2double(rgb2gray(imread(file)));
 % увеличиваем границы нечетного изображения
 img_source = padarray(img_source,mod(size(img_source),2),'replicate','pre');
 
-gaussian_kernel = fspecial('gaussian', ceil(gaussian_sigma*2)*2+1, gaussian_sigma);
+% ceil(gaussian_sigma*2)*2+1
+gaussian_kernel = fspecial('gaussian', 7, gaussian_sigma);
 
 %img = 255 * img;
 scale = 2;
 
-warps = [1 -1;];
-%warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
+%warps = [1 -1;];
+warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
 %warps = [0 0; 0 0; 0 0; 0 0];
 % get lr images from hr
 
@@ -48,7 +49,7 @@ hr_size = lr_size * scale;
 %% main
 X = zeros(hr_size);
 for i = 1:length(imgs)
-    X = X + shift(imresize(imgs{i}, scale, 'nearest'),-warps(i,1),-warps(i,2));
+    X = X + shift(imresize(imgs{i}, scale, 'bilinear'),-warps(i,1),-warps(i,2));
 end
 X = X / length(imgs);
 init = X;
@@ -98,7 +99,7 @@ while cont
     subplot(2,2,4);plot(x_values, psnr_plot);title('PSNR');
     ylabel('PNSR');xlabel('iteration');
     
-    figure(result_figure);
+    if (~exist('b_hide_fig','var')); figure(result_figure); end;
     n_step = n_step+1;
 
     cont = ~ (nor < epsilon && gamma == gamma_target);
@@ -112,10 +113,12 @@ while cont
     % end
 end
 
-if (exist('is_batch','var')) 
+if (exist('b_is_batch','var')) 
     fname = ['out/nor' num2str(max(psnr_plot)-min(psnr_plot)) '_l' num2str(lambda) '_a' num2str(alpha) '.png'];
-    saveas(result_figure, fname, 'png')
     save([fname '.mat'])
-    close(result_figure);
+    if (~exist('b_hide_fig','var'));  
+         saveas(result_figure, fname, 'png'); 
+         close(result_figure);
+    end;
 end
 
