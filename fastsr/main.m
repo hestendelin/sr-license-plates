@@ -7,8 +7,8 @@ if (~exist('b_hide_fig','var')); result_figure = figure; end;
 % subplot(2,2,1); title('source'); imshow(img);
 %img = imresize(img_source, 0.5,'nearest');
 
-if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.4      ;end;
-if (~exist('noise_level', 'var'))    ; noise_level    = 0.03         ;end;
+if (~exist('gaussian_sigma', 'var')) ; gaussian_sigma = 0.01      ;end;
+if (~exist('noise_level', 'var'))    ; noise_level    = 0.0         ;end;
 
 if (~exist('lambda', 'var'))         ; lambda         = 0.2       ;end;
 if (~exist('gamma','var'))           ; gamma          = 300       ;end;
@@ -16,6 +16,7 @@ if (~exist('gamma_target', 'var'))   ; gamma_target   = 10        ;end;
 if (~exist('k', 'var'))              ; k              = 0.95      ;end;
 if (~exist('alpha', 'var'))          ; alpha          = 0.07      ;end;
 if (~exist('epsilon', 'var'))        ; epsilon        = 0.005     ;end;
+if (~exist('warp_noise', 'var'))     ; warp_noise     = 0         ;end;
 if (~exist('file', 'var'))    ; file    = '../plates/norm70/003.png';end;
 
 
@@ -30,7 +31,7 @@ gaussian_kernel = fspecial('gaussian', 7, gaussian_sigma);
 scale = 2;
 
 %warps = [1 -1;];
-warps = [0 0;1 -1;-1, 1; 1,1; -1,-1];
+warps = [0 0;0.5 0.5;-1, 1; 1,1; -1,-1];
 %warps = [0 0; 0 0; 0 0; 0 0];
 % get lr images from hr
 
@@ -45,6 +46,8 @@ for war = 1:size(warps,1)
 end
 lr_size = size(imgs{1});
 hr_size = lr_size * scale;
+
+warps = warps + warp_noise .* randn(size(warps));
 
 %% main
 X = zeros(hr_size);
@@ -63,8 +66,10 @@ cont = true;
 n_step = 1;
 gamma_plot = []; nor_plot = []; psnr_plot = [];
 
-subplot(2,2,1);imshow(X);title('Initial estimation');
-subplot(2,2,3);imshow(img_source);title('Original HR image');
+if (~exist('b_hide_fig','var'))
+    subplot(2,2,1);imshow(X);title('Initial estimation');
+    subplot(2,2,3);imshow(img_source);title('Original HR image');
+end
 % imwrite(X,'combined.png')
 %warps = [0 0;1 -0.9;-1.1, 1.1; 1,0.9; -1.1,-1];
 while cont
@@ -82,24 +87,32 @@ while cont
 %    alpha = alpha*0.99;
     nor = norm(upsampled - X);
 
-    disp(['iteration ' num2str(n_step) ', gamma=' num2str(gamma) ',norm=' num2str(nor)]);
+
     if (nor < epsilon)
         gamma = max(gamma_target, k*gamma);
     end
-    % plot
-    subplot(2,2,2);imshow(uint8(255*X));title('Current');
+
     X(X<0)=0; X(X>1)=1;
     
     gamma_plot(end + 1) = gamma; 
     nor_plot(end + 1) = nor;
     psnr_plot(end + 1) = PSNR(img_source, X);
-    x_values = 1:n_step;
-    %subplot(2,2,3);plot(x_values, nor_plot);title('NORMA');
     
-    subplot(2,2,4);plot(x_values, psnr_plot);title('PSNR');
-    ylabel('PNSR');xlabel('iteration');
-    
-    if (~exist('b_hide_fig','var')); figure(result_figure); end;
+    if (~exist('b_is_batch','var')) 
+        disp(['iteration ' num2str(n_step) ', gamma=' num2str(gamma) ',norm=' num2str(nor)]);
+  
+    end
+    if (~exist('b_hide_fig','var'))
+        % plot
+        subplot(2,2,2);imshow(uint8(255*X));title('Current');
+        x_values = 1:n_step;
+        %subplot(2,2,3);plot(x_values, nor_plot);title('NORMA');
+
+        subplot(2,2,4);plot(x_values, psnr_plot);title('PSNR');
+        ylabel('PNSR');xlabel('iteration');
+        figure(result_figure);
+    end
+
     n_step = n_step+1;
 
     cont = ~ (nor < epsilon && gamma == gamma_target);
