@@ -1,14 +1,27 @@
 \ProvidesClass{matmex-diploma-custom}[2013/04/12 MatMex LaTeX diploma class]
-\LoadClass[a4paper,12pt]{article}
+\def\my@fontsize{12pt}\def\my@baseclass{article}
+\DeclareOption{14pt}{\def\my@fontsize{14pt}\def\my@baseclass{extarticle}}
+\ProcessOptions\relax
+\LoadClass[a4paper,\my@fontsize]{\my@baseclass}
+
+\usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
 \usepackage{ifthen}
+\usepackage[utf8]{inputenc}
+% \setcounter{secnumdepth}{1}
+% \setcounter{tocdepth}{2}
+\usepackage{babel}
+\usepackage{setspace}
+\usepackage[numbers]{natbib}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
 %% Мы используем компилятор XeLaTex, который дружит с Unicode и True Type/Open Type
 %% шрифтами. Для русификации достаточно подключить пакет fontspec и
 %% выбрать Unicode шрифт в котором есть кириллические глифы. Ниже
 %% основным шрифтом выбирается Unicode версия шрифта Computer Modern с заcечками
-\usepackage[T2]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{babel}
+% \usepackage{fontspec}
+% \setmainfont[Mapping=tex-text]{CMU Serif}
 
 %% В XeLaTex заменой известного пакета babel является пакет polyglossia.
 %% Теперь у нас будут переносы слов
@@ -25,7 +38,18 @@
 
 %% Включение графических файлов
 % \usepackage[xetex]{graphicx}
-\usepackage[titletoc]{appendix}
+% \usepackage[titletoc]{appendix}
+
+%% Эта команда добавляет отчеркнутое место для подписи после имени
+%% Аргументы: имя и пояснение под чертой (например, слово "подпись")
+\def\sigspace{\\[3em]}
+\newcommand\sigplace[2]{
+#1\\
+\underline{\hspace{3cm}}\\[-10pt]
+{\footnotesize #2}
+\def\sigspace{\\[1em]%
+\def\sigspace{\\[3em]}}
+}
 
 %% Параметры заполнения титульного листа
 \usepackage{xkeyval}
@@ -46,7 +70,7 @@
 \define@key[ru]{mytitle}{chairHeadPosition}{\def\my@title@chairHeadPosition@ru{#1}}
 \define@key[ru]{mytitle}{year}{\def\my@title@year@ru{#1}}
 \define@key[ru]{mytitle}{city}{\def\my@title@city@ru{#1}}
-\define@choicekey*[ru]{mytitle}{type}{diploma,coursework}{\def\my@title@type@ru{#1}}
+\define@choicekey*[ru]{mytitle}{type}{diploma,coursework,master,bachelor}{\def\my@title@type@ru{#1}}
 
 %% Англоязычный вариант
 \define@key[en]{mytitle}{university}{\def\my@title@university@en{#1}}
@@ -86,7 +110,7 @@
           faculty = {Mathematics \& Mechanics Faculty},
           city = {Saint-Petersburg},
           year = {\the\year},
-          type = {master}
+          type = {diploma}
         }{}
         }
         {}
@@ -95,129 +119,81 @@
 
 %% Титульная страница на русском языке
 \newcommand\maketitleru{
-%% В верхнем колонтитуле будет университет и кафедра
-%% В нижнем колонтитуле город и год
-\fancypagestyle{plain}{
-    \fancyhf{}
-    \renewcommand{\headrulewidth}{0pt}
-    \chead{\large \my@title@university@ru \\ \my@title@faculty@ru \\ \vskip 1em{\large \my@title@chair@ru \\}}
-    \lfoot{}
-    \cfoot{\large\parbox[b]{\textwidth}{\centering \my@title@city@ru\\ \my@title@year@ru}}
-    \rfoot{}
-}
-
 \title{\my@title@title@ru}
 \begin{titlepage}
-\thispagestyle{plain}
-%% На титульной странице интервалы обычные
-\def\baselinestretch{1.0}
-\begin{center}
-    \vspace*{0.3\textheight}
+  \begin{center}
+{\large \my@title@university@ru \\ \my@title@faculty@ru \\ \vskip 1em{\large \my@title@chair@ru}}
+
+    \vspace*{7em}
     {\Large\my@title@author@ru}
-    
     \vskip 2em
     {\Huge \@title}
-    
     \vskip 1em
-    {\large 
-    \ifthenelse{\equal{\my@title@type@ru}{coursework}}
-    {Курсовая работа}
-    {\ifthenelse{\equal{\my@title@type@ru}{diploma}}
-    {Дипломная работа}
-    {\ifthenelse{\equal{\my@title@type@ru}{master}}
-    {Магистерская диссертация}
-    {\ifthenelse{\equal{\my@title@type@ru}{bachelor}}
-    {Бакалаврская работа}
-    }}}
-    \\}
+    {\large {Бакалаврская работа} \\}
     \vskip 2em
-    \ifthenelse{\equal{\my@title@type@ru}{coursework}}
-    {\normalsize \raggedleft 
-    Научный руководитель:\\
-    \my@title@supervisorPosition@ru\ \my@title@supervisor@ru
-    }
-    {\normalsize \raggedleft 
+    {\normalsize \raggedleft
     Допущена к защите.\\
     Зав. кафедрой:\\
-    \my@title@chairHeadPosition@ru\ \my@title@chairHead@ru
-    \\[3em]
+    \my@title@chairHeadPosition@ru\ \my@title@chairHead@ru\sigspace
     Научный руководитель:\\
-    \my@title@supervisorPosition@ru\ \my@title@supervisor@ru
-    \\[3em]
+    \my@title@supervisorPosition@ru\ \my@title@supervisor@ru\sigspace
     Рецензент:\\
-    \my@title@reviewerPosition@ru\ \my@title@reviewer@ru
+    \my@title@reviewerPosition@ru\ \my@title@reviewer@ru\\
     }
+\vfill
+{\large\parbox[b]{\textwidth}{\centering \my@title@city@ru\\ \my@title@year@ru}}
 \end{center}
 \end{titlepage}
 }
 
 %% Титульная страница на английском языке
 \newcommand\maketitleen{
-%% В верхнем колонтитуле будет университет и кафедра
-%% В нижнем колонтитуле город и год
-\fancypagestyle{plain}{
-    \fancyhf{}
-    \renewcommand{\headrulewidth}{0pt}
-    \chead{\Large \my@title@university@en \\ \my@title@faculty@en \\ \vskip 1em{\large \my@title@chair@en \\}}
-    \lfoot{}
-    \cfoot{\large\parbox[b]{\textwidth}{\centering \my@title@city@en\\ \my@title@year@en}}
-    \rfoot{}
-}
 \title{\my@title@title@en}
-\begin{titlepage}%
-\thispagestyle{plain}
-%% На титульной странице интервалы обычные
-\def\baselinestretch{1.0}
+\begin{titlepage}
   \begin{center}
-    \vspace*{0.3\textheight}
+{\large \my@title@university@en \\ \my@title@faculty@en \\ \vskip 1em{\large \my@title@chair@en \\}}
+
+    \vspace*{7em}
     {\Large\my@title@author@en\\}
-    
     \vskip 2em
     {\Huge \@title \\}
-    
     \vskip 1em
-    {\large 
-    \ifthenelse{\equal{\my@title@type@en}{coursework}}
-    {Course Work}
-    {\ifthenelse{\equal{\my@title@type@en}{diploma}}
-    {Graduation Thesis}
-    {\ifthenelse{\equal{\my@title@type@en}{master}}
-    {Master's Thesis}
-    {\ifthenelse{\equal{\my@title@type@en}{bachelor}}
-    {Bachelor's Thesis}
-    }}}
-    \\}
+    {\large Bachelor's Thesis \\}
     \vskip 2em
-    \ifthenelse{\equal{\my@title@type@en}{coursework}}
-    {\normalsize \raggedleft 
-    Scientific supervisor:\\
-    \my@title@supervisorPosition@en\ \my@title@supervisor@en
-    }
-    {\normalsize \raggedleft 
+    {\normalsize \raggedleft
     Admitted for defence.\\
     Head of the chair:\\
-    \my@title@chairHeadPosition@en\ \my@title@chairHead@en
-    \\[3em]
+    \my@title@chairHeadPosition@en\ \my@title@chairHead@en\sigspace
     Scientific supervisor:\\
-    \my@title@supervisorPosition@en\ \my@title@supervisor@en
-    \\[3em]
+    \my@title@supervisorPosition@en\ \my@title@supervisor@en\sigspace
     Reviewer:\\
-    \my@title@reviewerPosition@en\ \my@title@reviewer@en
+    \my@title@reviewerPosition@en\ \my@title@reviewer@en\\
     }
-  \end{center}
+\vfill
+{\large\parbox[b]{\textwidth}{\centering \my@title@city@en\\ \my@title@year@en}}
+\end{center}
 \end{titlepage}
 }
 
 %% Титульный лист генерируется, если для соответствующего языка
 %% определен аргумент title
 %% Счетчик страниц автоматически увеличивается при генерации титульнго листа
-\renewcommand\maketitle{
+\renewcommand\maketitle{{
+% На титульной странице все кроме полей соответствует \documentclass[12pt]{a4paper}
+ \let\orignewcommand\newcommand
+ \let\newcommand\renewcommand
+ \makeatletter
+ \input{size12.clo}%
+ \makeatother
+ \let\newcommand\orignewcommand
+\newgeometry{a4paper,includeheadfoot,top=10mm,bottom=10mm,left=10mm,right=10mm}
+
 \newcounter{titlepages}
 \setcounter{titlepages}{1}
 \ifthenelse{\isundefined{\my@title@title@ru}}{}{\maketitleru\addtocounter{titlepages}{1}}
 \ifthenelse{\isundefined{\my@title@title@en}}{}{\maketitleen\addtocounter{titlepages}{1}}
 \setcounter{page}{\value{titlepages}}
-}
+}}
 
 %% Каждая глава начинается с новой страницы, введение и заключение не
 %% нумеруются, но в оглавление входят. А само оглавление и список литературы,
@@ -237,7 +213,8 @@
 \renewcommand\baselinestretch{1.5}
 
 %% Переименование "содержания" в "оглавление"
-\gappto\captionsrussian{\renewcommand{\contentsname}{Оглавление}}
+% \gappto\captionsrussian{\renewcommand{\contentsname}{Оглавление}}
 
 \let\savenumberline\numberline
 \def\numberline#1{\savenumberline{#1.}}
+

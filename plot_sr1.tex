@@ -1,0 +1,74 @@
+% This file was created by matlab2tikz v0.3.3.
+% Copyright (c) 2008--2013, Nico SchlГ¶mer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=\paperwidth,
+height=0.788709677419355\paperwidth,
+scale only axis,
+xmin=0,
+xmax=16,
+xlabel={Номер изображения},
+ymin=14,
+ymax=26,
+ylabel={PSNR},
+legend style={draw=black,fill=white,legend cell align=left}
+]
+\addplot [
+color=blue,
+solid
+]
+table[row sep=crcr]{
+1 22.6637207689603\\
+2 16.5862621065916\\
+3 20.2561814850212\\
+4 16.8180326138836\\
+5 15.2818944883097\\
+6 20.8935173361133\\
+7 19.9100975616132\\
+8 21.8054095243458\\
+9 19.5938529440994\\
+10 14.97066690973\\
+11 17.6444789637467\\
+12 19.6591796988059\\
+13 24.5276502442069\\
+14 19.6886965973242\\
+15 18.0639264824657\\
+16 22.7687595823891\\
+};
+\addlegendentry{PSNR Алгоритм с обучаемыми словарями};
+
+\addplot [
+color=green!50!black,
+solid
+]
+table[row sep=crcr]{
+1 20.654183811932\\
+2 15.5287572495406\\
+3 14.6873141103361\\
+4 16.906444307724\\
+5 16.6431061328363\\
+6 15.8814467785726\\
+7 15.7004358294634\\
+8 20.0170778439843\\
+9 15.4643027107035\\
+10 16.2470604606123\\
+11 17.5627961112945\\
+12 23.0775671820967\\
+13 22.5057715768468\\
+14 17.6125613605738\\
+15 17.383467191801\\
+16 16.1412027040119\\
+};
+\addlegendentry{PSNR Бикубичессой интерполяции};
+
+\end{axis}
+\end{tikzpicture}%

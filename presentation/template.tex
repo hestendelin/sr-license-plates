@@ -16,6 +16,9 @@
 
 %LST LISTINGS
 \usepackage{listings}
+\usepackage{tikz,pgfplots}
+%\pgfplotsset{compat=newest}
+%\pgfplotsset{plot coordinates/math parser=false}
 
 \usepackage{color}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
@@ -45,6 +48,7 @@
 
 
 \usepackage[absolute,overlay]{textpos}
+\usepackage[labelformat=empty]{caption}
 
 %\usetheme{Darmstadt}...
 \usetheme{default}
@@ -56,7 +60,7 @@
 \newcommand<>{\bigimgh}[1]{
         {
                 \begin{frame}
-                        \begin{tikzpicture}[remember picture,overlay]
+                        \begin{tikzpicture}[remember picture]
                                 \node[at=(current page.center)] {
                                         \includegraphics[height=\paperheight]{#1}
                                 };

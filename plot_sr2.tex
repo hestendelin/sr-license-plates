@@ -1,0 +1,74 @@
+% This file was created by matlab2tikz v0.3.3.
+% Copyright (c) 2008--2013, Nico SchlГ¶mer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=10cm,
+height=7.88709677419355cm,
+scale only axis,
+xmin=0,
+xmax=16,
+xlabel={Номер изображения},
+ymin=12,
+ymax=30,
+ylabel={PSNR},
+legend style={draw=black,fill=white,legend cell align=left}
+]
+\addplot [
+color=blue,
+solid
+]
+table[row sep=crcr]{
+1 27.4470571608433\\
+2 22.8300247931548\\
+3 22.1109193658809\\
+4 22.0652635937327\\
+5 23.6272496813018\\
+6 21.6055079117517\\
+7 21.4619565703478\\
+8 26.9867634881452\\
+9 20.9809477047241\\
+10 23.2957078121211\\
+11 23.9394056382537\\
+12 25.5317267141373\\
+13 29.2416356490523\\
+14 24.1599986234539\\
+15 23.7307351145084\\
+16 22.5888532577419\\
+};
+\addlegendentry{$\text{PSNR SR}_\text{2}$};
+
+\addplot [
+color=green!50!black,
+solid
+]
+table[row sep=crcr]{
+1 18.4503335459593\\
+2 15.9429403769346\\
+3 15.9459841548511\\
+4 15.5934814518383\\
+5 16.9838249182421\\
+6 13.7171337206461\\
+7 12.7696291928783\\
+8 21.6627180369299\\
+9 13.6838913514568\\
+10 18.8295593160528\\
+11 17.4771261841067\\
+12 20.0919833166445\\
+13 22.2356695114555\\
+14 16.697098012576\\
+15 18.4542205359683\\
+16 15.4386868770896\\
+};
+\addlegendentry{PSNR init};
+
+\end{axis}
+\end{tikzpicture}%

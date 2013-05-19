@@ -3,10 +3,11 @@
 \author{
   \begin{tabular}[4cm]{rl}
  Автор:                & Улитин А.~А., 461 гр. \\
- Научный руководитель: & доц.~Вахитов А.~Т.
+ Научный руководитель: & доц.~Вахитов А.~Т. \\
+ Рецензент: & Пименов А. А. \\
  \end{tabular}
  }
-\date{}
+\date{2013 год}
 
 \begin{frame}{}
 		\maketitle
@@ -21,11 +22,17 @@
 \begin{frame}{Почему это возможно}
   Для повышения разрешения используется дополнительная информация
   \begin{itemize}
-    \item знание параметров съемки (размытие, движение камеры~и~т.п.)
-    \item знание о типе снимаемого объекта (текст, лица, и т.п.)
-    \item использование нескольких изображей, снятых с разных ракурсов
+    \item Знание параметров съемки (размытие, движение камеры~и~т.п.)
+    \item Знание о типе снимаемого объекта (текст, лица, и т.п.)
+    \item Использование нескольких изображей, снятых с разных ракурсов
   \end{itemize}
   которая влияет на конечное изображение
+
+  Применимость:
+  \begin{itemize}
+    \item Препроцессинг для других алгоритмов компьютерного зрения
+    \item Извлечение дополнительной информации с нескольких снимков для получения одного кадра с высоким разрешением
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{PSNR}
@@ -57,28 +64,34 @@
 \begin{frame}{Сравниваемые подходы}
   \begin{itemize}
     \item Couple Dictionary Training for Image Super-resolution \\
-        (Jianchao Yang,Zhaowen Wang, Zhe Lin,Scott Cohen, and Thomas Huang)
+        (Jianchao Yang,Zhaowen Wang, Zhe Lin,Scott Cohen, and Thomas Huang) \\
+  Основная идея метода очень проста -- тренировка словаря из патчей небольшого размера в двух разрешениях LR и HR
       \begin{itemize}
-        \item использует пару тренированных словарей
-        \item восстановление по одному изображению
+        \item Использует пару тренированных словарей
+        \item Восстановление по одному изображению
       \end{itemize}
     \item Superresolution of License Plates in Real Traffic Videos \\
-      (K. V. Suresh, G. Mahesh Kumar, and A. N. Rajagopalan)
+      (K. V. Suresh, G. Mahesh Kumar, and A. N. Rajagopalan) \\
+      Основная идея -- использование шаговой оптимизации с адаптивным регуляризатором.
       \begin{itemize}
-        \item для восстановление использует последовательную оптимизацию с
+        \item Для восстановление использует последовательную оптимизацию с
           регуляризаторами
-        \item использует несколько изображений
+        \item Использует несколько изображений
       \end{itemize}
   \end{itemize}
 \end{frame}
 
-\newcommand{\inimage}[2]{
-  \begin{minipage}{#1}
-    \vcenter{\includegraphics[width=\columnwidth]{#2}}
-  \end{minipage}
-}
+%\section{Описание подходов}
+%\begin{frame}{Подход с тренированными словарями}
+%\end{frame}
 
-
+% \newcommand{\inimage}[2]{
+%   \begin{minipage}{#1}
+%     \vcenter{\includegraphics[width=\columnwidth]{#2}}
+%   \end{minipage}
+% }
+%
+%
 % \section{Приведение изображений}
 % \begin{frame}{Несколько изображение $\rightarrow$ одно изображение}
 %   Для тестирования на однинаковых наборах данных из lr строились псевдо hr для
@@ -86,7 +99,7 @@
 %   $$ R = \frac{1}{n}\sum_{i=1}^nW^T \cdot S \cdot IMG_{lr i}$$
 %   $S$ --- билинейная интерполяция \\
 %   $W$ --- сдвиг
-% 
+%
 %   \inimage{3cm}{content/imgs/append_imgs_big.jpg}
 %   $\to$
 %   \inimage{6cm}{content/imgs/combined_big.jpg}
@@ -97,31 +110,50 @@
 \end{frame}
 
 \section{SR1}
-\begin{frame}{Результаты подхода}
-  \includegraphics[width=\columnwidth]{content/pnsr_for_big_jpeg.pdf}
+\begin{frame}{Результаты подхода алгоритма со словарями}
+  \input{../plots/plot_sr1.tex}
 \end{frame}
-\begin{frame}{Пример изображений SR1}
+
+\begin{frame}{Пример изображений алгоритма со словарями}
   \includegraphics[width=\columnwidth]{content/compare_result_sr1.pdf}
 \end{frame}
 
-\section{RESULT 2}
+\section{SR2}
 \begin{frame}{Результаты подхода}
-  \includegraphics[width=\columnwidth]{content/compare_result_sr2.pdf}
-\end{frame}
-\begin{frame}{Пример изображений SR2}
-  \includegraphics[width=\columnwidth]{content/sr2_result_img.pdf}
+  \input{../plots/plot_sr2.tex}
 \end{frame}
 
-\begin{frame}{Пример изображений SR2}
-  \includegraphics[width=\columnwidth]{content/sr2_two_images.pdf}
+\begin{frame}{Пример изображений алгоритма с регуляризацией}
+  \input{../plots/sr2_psnr_rising.tex}
 \end{frame}
 
-\section{Итоги}
+\begin{frame}{Пример изображений алгоритма с регуляризацией}
+  \input{../plots/sr2_psnr_rising_2.tex}
+\end{frame}
 
-\begin{frame}{Итоги}
+\begin{frame}{Пример изображений алгоритма с регуляризацией}
+%   \begin{tikzpicture}
+%     \node (img1) {\includegraphics[width=10cm]{content/sr2_two_1.png}};
+%     \node (img1) {\includegraphics[width=10cm]{content/sr2_two_2.png}};
+%   \end{tikzpicture}
+  \begin{figure}
+    \caption{Результат}
+    \includegraphics[width=\columnwidth]{content/sr2_two_1.png}\\
+  \end{figure}
+  \begin{figure}
+    \caption{Начальное приближение}
+    \includegraphics[width=\columnwidth]{content/sr2_two_2.png}
+  \end{figure}
+ %\includegraphics[width=\columnwidth]{content/sr2_two_images.pdf}
+\end{frame}
+
+\section{Результаты}
+
+\begin{frame}{Результаты}
   \begin{itemize}
-    \item были исследованы и реализованы два подхода к задаче SR
-    \item эксперименты показывают, что оба алгоритма качественно повышают разрешения автомобильного
+    \item Были исследованы и реализованы два подхода к задаче SR
+    \item Эксперименты показывают, что оба алгоритма качественно повышают разрешения автомобильного
       номера.
+    \item Результаты работы будут опубликованы на конференции СПИСОК-2013
   \end{itemize}
 \end{frame}

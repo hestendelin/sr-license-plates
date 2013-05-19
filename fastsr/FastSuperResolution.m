@@ -63,9 +63,9 @@ n_step = 1;
 result.gamma_plot = []; result.nor_plot = []; result.psnr_plot = [];
 
 if ~op.b_hide_fig
-    subplot(2,2,1);imshow(X);title('Initial estimation');
+    subplot(2,2,1);imshow(X);title('Начальное приближение');
     if isfield(op,'img_source')
-        subplot(2,2,3);imshow(op.img_source);title('Original HR image');
+        subplot(2,2,3);imshow(op.img_source);title('Оригинальное изображение');
     end
 end
 % imwrite(X,'combined.png')
@@ -109,20 +109,20 @@ while cont
     end
 
     if ~op.b_is_batch
-        disp(['iteration ' num2str(n_step) ', gamma=' num2str(op.gamma) ',norm=' num2str(nor)]);
+        disp(['Итерация ' num2str(n_step) ', gamma=' num2str(op.gamma) ',norm=' num2str(nor)]);
     end
 
     if ~op.b_hide_fig
         % plot
-        subplot(2,2,2);imshow(uint8(255*X));title('Current');
+        subplot(2,2,2);imshow(uint8(255*X));title('Результат');
         x_values = 1:(n_step-1);
         %subplot(2,2,3);plot(x_values, result.nor_plot);title('NORMA');
 
         if isfield(op,'img_source')
             subplot(2,2,4);plot(x_values, result.psnr_plot);title('PSNR');
-            ylabel('PNSR');
+            ylabel('PNSR dB');
         end
-        xlabel('iteration');
+        xlabel('Итерация');
         figure(result_figure);
     end
 end
