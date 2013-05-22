@@ -1,1 +1,5 @@
 git config core.autocrlf input
+*.lyx text eol=lf
+
+*.bash text eol=lf
+*.zsh text eol=lf
