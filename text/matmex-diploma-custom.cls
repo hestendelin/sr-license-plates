@@ -16,6 +16,10 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathptmx}
+\usepackage{multimedia}
+\usepackage{tikz,pgfplots}
 %% Мы используем компилятор XeLaTex, который дружит с Unicode и True Type/Open Type
 %% шрифтами. Для русификации достаточно подключить пакет fontspec и
 %% выбрать Unicode шрифт в котором есть кириллические глифы. Ниже
