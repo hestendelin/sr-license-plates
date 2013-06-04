@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dir="/home/d/.latextemp"
-FILE="template"
+FILE="template_$LANG"
 
 pdflatex -output-directory=$dir -interaction=nonstopmode "$FILE.tex"
 
