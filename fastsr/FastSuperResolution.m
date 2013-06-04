@@ -37,7 +37,8 @@ if ~isfield(op, 'warps')
     zeroimage = imresize(imgs{1}, op.scale, 'bilinear');
     warps = zeros(length(imgs),2);
     for i = 2:length(imgs)
-        warps(i,:) = -estimateMotion(zeroimage,imresize(imgs{i}, op.scale, 'bilinear'));
+        %warps(i,:) = -estimateMotion(zeroimage,imresize(imgs{i}, op.scale, 'bilinear'));
+        warps(i,:) = warpEstimate(imgs{1},imgs{i})*op.scale;
     end
 else
     warps = op.warps;
@@ -46,8 +47,6 @@ result.warps = warps;
 
 % precalculate kernel
 gaussian_kernel = fspecial('gaussian', 7, op.gaussian_sigma);
-
-
 
 X = zeros(hr_size);
 for i = 1:length(imgs)
