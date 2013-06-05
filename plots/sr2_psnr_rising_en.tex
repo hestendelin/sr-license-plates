@@ -1,0 +1,136 @@
+% This file was created by matlab2tikz v0.3.3.
+% Copyright (c) 2008--2013, Nico SchlГ¶mer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=5cm,
+height=1cm,
+axis on top,
+scale only axis,
+xmin=0.5,
+xmax=50.5,
+y dir=reverse,
+ymin=0.5,
+ymax=10.5,
+hide axis,
+name=plot1,
+title={Initial estimation}
+]
+\addplot graphics [xmin=0.5,xmax=50.5,ymin=0.5,ymax=10.5] {../plots/sr2_psnr_rising-1.png};
+\end{axis}
+
+\begin{axis}[%
+width=5cm,
+height=1cm,
+axis on top,
+scale only axis,
+xmin=0.5,
+xmax=50.5,
+y dir=reverse,
+ymin=0.5,
+ymax=10.5,
+hide axis,
+name=plot2,
+at=(plot1.below south west),
+anchor=above north west,
+title={Original image}
+]
+\addplot graphics [xmin=0.5,xmax=50.5,ymin=0.5,ymax=10.5] {../plots/sr2_psnr_rising-2.png};
+\end{axis}
+
+\begin{axis}[%
+width=5cm,
+height=3.74020102770053cm,
+scale only axis,
+xmin=0,
+xmax=60,
+xlabel={Iteration},
+ymin=12,
+ymax=20,
+ylabel={PNSR dB},
+name=plot4,
+at=(plot2.right of south east),
+anchor=left of south west,
+title={PSNR}
+]
+\addplot [
+color=blue,
+solid,
+forget plot
+]
+table[row sep=crcr]{
+1 12.3202813060895\\
+2 12.9529644677536\\
+3 13.5260641864726\\
+4 14.0455567679328\\
+5 14.5157791626175\\
+6 14.9401084698002\\
+7 15.3214501720298\\
+8 15.6625515600167\\
+9 15.966172416695\\
+10 16.2351495750173\\
+11 16.4723907826822\\
+12 16.6808285374995\\
+13 16.8633577505267\\
+14 17.022773711704\\
+15 17.1617200798005\\
+16 17.2826512422842\\
+17 17.3878096467359\\
+18 17.4792164732515\\
+19 17.5586729726292\\
+20 17.6277695606153\\
+21 17.6878999988837\\
+22 17.7402784568312\\
+23 17.7859577695793\\
+24 17.8258476931939\\
+25 17.8607323650764\\
+26 17.8912864943554\\
+27 17.9180900396926\\
+28 17.9416412935904\\
+29 17.9623683983446\\
+30 17.9806393834473\\
+31 17.9967708494893\\
+32 18.011035438794\\
+33 18.0236682351711\\
+34 18.0348722293508\\
+35 18.0448229763448\\
+36 18.0536725585498\\
+37 18.0615529553497\\
+38 18.0685789072431\\
+39 18.0748503506304\\
+40 18.0804544886167\\
+41 18.0854675536173\\
+42 18.0899563091761\\
+43 18.0939793311617\\
+44 18.0975881022909\\
+45 18.1008279486261\\
+46 18.1037388421964\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=5cm,
+height=1cm,
+axis on top,
+scale only axis,
+xmin=0.5,
+xmax=50.5,
+y dir=reverse,
+ymin=0.5,
+ymax=10.5,
+hide axis,
+at=(plot4.above north west),
+anchor=below south west,
+title={Result}
+]
+\addplot graphics [xmin=0.5,xmax=50.5,ymin=0.5,ymax=10.5] {../plots/sr2_psnr_rising-3.png};
+\end{axis}
+\end{tikzpicture}%

@@ -1,12 +1,16 @@
 % \title{ Сравнение подходов обучения на базе словаря и MAP к проблеме повышения разрешения на примере изображений автомобильных номеров }
-\title{Super resolution of car plate images}
+\title{Super resolution of license plate images: comparative analysis of dictionary-based and MAP-based approaches}
 \author{
   \begin{tabular}[4cm]{rl}
- Author:                & Ulitin A.~A.\\
- Science supervisor: & Ph.D.~Vakhitov A.~T. \\
+ Author:                & Ulitin A.~A. \\
+ & alexander.a.ulitin@gmail.com\\
+%R  Science supervisor: & Ph.D.~Vakhitov A.~T. \\
+%R  & alex@divisionlabs.com \\
  \end{tabular}
  }
-\date{2013 year}
+\date{Mathematics and Mechanics Faculty \\
+  St. Petersburg State University \\
+2013 year}
 
 \begin{frame}{}
 		\maketitle
@@ -21,7 +25,7 @@
 \begin{frame}{Why is it possible}
   Image super-resolution use additional knowelege about enviroment:
   \begin{itemize}
-    \item Knoweledge of (blur information, camera motion etc)
+    \item Knoweledge of blur information, camera motion etc
     \item Knoweledge of imaging object(text, faces, car plates, etc)
     \item Using several images taked from different places
   \end{itemize}
@@ -31,6 +35,17 @@
     \item Preprocessing for another CV algorythm.
     \item Extract additional information from several images.
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Superresolution methods}
+  \begin{itemize}
+    \item Training algorithms
+    \item Interpolation
+    \item Spectral representation
+    \item Regularization
+  \end{itemize}
+
+Or any combination of methods from above
 \end{frame}
 
 \begin{frame}{PSNR metric}
@@ -46,38 +61,83 @@
 
 \begin{frame}{Problem formulation}
  $$y_r = D H_R W_R x + n_r,~ ~ ~ 1 \leq r \leq m$$
- where:
+where:
  \begin{itemize}
-\item $ x $ original image 
+\item $ x $ original image
 \item $ y_r $ observation r    
 \item $ D $ matrix downsampling    
 \item $ W $ matrix of geometric distortion    
 \item $ H_R $ matrix blur observation r    
 \item $ n_r $ observation noise r    
-\item $ m $ the number of observations 
+\item $ m $ the number of observations
  \end{itemize}
- Задача найти
+ The task of finding:
  $$ \tilde{x} = \underset{\hat{x}}{\operatorname{argmax}}~  PSNR(\hat{x},x)$$
 \end{frame}
-\section{Подходы}
-\begin{frame}{Сравниваемые подходы}
+
+\section{Methods}
+\begin{frame}{Methods}
   \begin{itemize}
     \item Couple Dictionary Training for Image Super-resolution \\
         (Jianchao Yang,Zhaowen Wang, Zhe Lin,Scott Cohen, and Thomas Huang) \\
-  Основная идея метода очень проста -- тренировка словаря из патчей небольшого размера в двух разрешениях LR и HR
+  The main idea is very simple - learn dictionary of small patches in two resolutions LR and HR.
       \begin{itemize}
-        \item Использует пару тренированных словарей
-        \item Восстановление по одному изображению
+        \item use two coupled dictionary
+        \item super-resolution by 1 image
       \end{itemize}
     \item Superresolution of License Plates in Real Traffic Videos \\
       (K. V. Suresh, G. Mahesh Kumar, and A. N. Rajagopalan) \\
-      Основная идея -- использование шаговой оптимизации с адаптивным регуляризатором.
+      Image to be superresolved is modeled as a Markov random field and is estimated from the observations by a graduated
+nonconvexity optimization procedure.
       \begin{itemize}
-        \item Для восстановление использует последовательную оптимизацию с
-          регуляризаторами
-        \item Использует несколько изображений
+        \item A discontinuity adaptive regularizer is used to preserve the
+edges in the reconstructed number plate for improved readability.
       \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Couple Dictionary Training for Image Super-resolution}
+  \begin{itemize}
+    \item learn couple dictionaries relate the low- and high-resolution image patch
+
+    \item we using author's implementation of algorithm with our training and test data.
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Superresolution of License Plates in Real Traffic Videos}
+\begin{enumerate}
+  \item Calculate $X^0$ as the average of the bilinearly upsampled and aligned images
+  \item Choose a convex $\lambda = 2v$, where v is the maximum value of the gradient along the x and y directions in the
+    initial estimate $X^0$
+  \item Do:
+    \begin{enumerate}
+      \item $X^{(n+1)} = X^{(n)} - \alpha\cdot\mathrm{grad}(X^{(N)}, \gamma) $
+      \item $n=n+1$
+      \item If $(\operatorname{norm}(X^{(n)}-X^{(n-1)}) < \epsilon)$\\
+        then $\gamma^{(n)} = \max \{\gamma_{\mathrm{target}}, k\gamma^{(n-1)}\}$
+    \end{enumerate}
+    Until $(norm(X^{(n)}-X^{(n-1)} < \epsilon)$ and $(\gamma^{(n)} = \gamma_{\mathrm{target}})$
+
+  \item $ \hat{x} = X^{(n)}$
+    where $\alpha$, $\epsilon$, $k$, $\gamma_{\mathrm target}$ experimentally selected parameters of the algorithm.
+\end{enumerate}
+$$
+\mathrm{grad}(x, \gamma) = \frac{1}{\sigma^2} \sum^m_{r=1} W^T_R H^T_r D^T (D H_r W_r x-y_r) + \lambda \cdot G(x, \gamma)
+$$
+где $\lambda$experimentally chosen regularization parameter and the gradient to the point $ (i, j) $ is given by the
+following formula.
+
+$$
+\begin{array}{rcl}
+ G(i,j) & = & 2\left[x(i,j)-x(i,j-1)\right] \exp\left(-[ x(i,j)-x(i,j-1) ]^2/\gamma \right) \\
+& + & 2\left[x(i,j)-x(i,j+1)\right] \exp\left(-[ x(i,j)-x(i,j+1) ]^2/\gamma \right) \\
+& + & 2\left[x(i,j)-x(i+1,j)\right] \exp\left(-[ x(i,j)-x(i-1,j) ]^2/\gamma \right) \\
+& + & 2\left[x(i,j)-x(i-1,j)\right] \exp\left(-[ x(i,j)-x(i+1,j) ]^2/\gamma \right)
+\end{array}
+$$
+
+Note: in experiments we use warp \textbf{without} rotating (only shift)
 \end{frame}
 
 %\section{Описание подходов}
@@ -104,55 +164,66 @@
 %   \inimage{6cm}{content/imgs/combined_big.jpg}
 % \end{frame}
 
-\begin{frame}{Исходные изображения}
+\begin{frame}{The original images}
   \includegraphics[width=\columnwidth]{content/out_sr1.png}
 \end{frame}
 
 \section{SR1}
-\begin{frame}{Результаты подхода алгоритма со словарями}
-  \input{../plots/plot_sr1.tex}
+\begin{frame}{The results of the algorithm with coupled dictionaries}
+  \input{../plots/plot_sr1_en.tex}
 \end{frame}
 
-\begin{frame}{Пример изображений алгоритма со словарями}
-  \includegraphics[width=\columnwidth]{content/compare_result_sr1.pdf}
+\begin{frame}{The results of the algorithm with coupled dictionaries}
+  \includegraphics[width=\columnwidth]{content/compare_result_sr1_en.pdf}
 \end{frame}
 
 \section{SR2}
-\begin{frame}{Результаты подхода}
-  \input{../plots/plot_sr2.tex}
+\begin{frame}{The results of algorithm FastSR}
+  \input{../plots/plot_sr2_en.tex}
 \end{frame}
 
-\begin{frame}{Пример изображений алгоритма с регуляризацией}
-  \input{../plots/sr2_psnr_rising.tex}
+\begin{frame}{The results of algorithm FastSR}
+  \input{../plots/sr2_psnr_rising_en.tex}
 \end{frame}
 
-\begin{frame}{Пример изображений алгоритма с регуляризацией}
-  \input{../plots/sr2_psnr_rising_2.tex}
+\begin{frame}{The results of algorithm FastSR}
+  \input{../plots/sr2_psnr_rising_2_en.tex}
 \end{frame}
 
-\begin{frame}{Пример изображений алгоритма с регуляризацией}
+\begin{frame}{The results of algorithm FastSR}
 %   \begin{tikzpicture}
 %     \node (img1) {\includegraphics[width=10cm]{content/sr2_two_1.png}};
 %     \node (img1) {\includegraphics[width=10cm]{content/sr2_two_2.png}};
 %   \end{tikzpicture}
   \begin{figure}
-    \caption{Результат}
+    \caption{The results of algorithm FastSR}
     \includegraphics[width=\columnwidth]{content/sr2_two_1.png}\\
   \end{figure}
   \begin{figure}
-    \caption{Начальное приближение}
+    \caption{Initial estimation}
     \includegraphics[width=\columnwidth]{content/sr2_two_2.png}
   \end{figure}
  %\includegraphics[width=\columnwidth]{content/sr2_two_images.pdf}
 \end{frame}
 
-\section{Результаты}
+\section{Results}
+\begin{frame}{Motion estimation}
+  In tests we use true information about shift LR images.
 
-\begin{frame}{Результаты}
-  \begin{itemize}
-    \item Были исследованы и реализованы два подхода к задаче SR
-    \item Эксперименты показывают, что оба алгоритма качественно повышают разрешения автомобильного
-      номера.
-    \item Результаты работы будут опубликованы на конференции СПИСОК-2013
-  \end{itemize}
+  We research FastSR algorythm result with additive Gaussian noise in warps.
+\end{frame}
+\bigimg{../text/img/warps_noise.png}{Warp noise test}
+\bigimg{../text/img/blur_lambda.png}{Blur test}
+\begin{frame}{Conslusion}
+ As a result of experiments, it was found that despite the fact that in most cases the first algorithm improves
+PSNR, the results of his work is much worse than the second.
+
+  The second algorithm is resistant to noise at the following initial data:
+\begin{itemize}
+\item robustness shift (up to 0.2 pixel error does not change the result, an error of up to 2 pixels leads to an increase
+  in PSNR in comparison with the initial approximation)
+\item robustness to noise on the original image (the normal noise with variance $ \sigma = 25 $ for luminance values from 0 to 255)
+\item robustness to blur on the original image($\sigma = 1$)
+\end{itemize}
+
 \end{frame}

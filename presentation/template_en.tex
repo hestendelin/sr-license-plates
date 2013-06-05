@@ -56,9 +56,9 @@
 \setbeamertemplate{footline}{}
 
  % BigIMgH
-\newcommand<>{\bigimgh}[1]{
+\newcommand<>{\bigimgh}[2]{
         {
-                \begin{frame}
+          \begin{frame}{#2}
                         \begin{tikzpicture}[remember picture]
                                 \node[at=(current page.center)] {
                                         \includegraphics[height=\paperheight]{#1}
@@ -68,9 +68,9 @@
         }
 }
  % BigIMg
-\newcommand<>{\bigimg}[1]{
+\newcommand<>{\bigimg}[2]{
         {
-                \begin{frame}
+          \begin{frame}{#2}
                         \begin{tikzpicture}[remember picture,overlay]
                                 \node[at=(current page.center)] {
                                         \includegraphics[width=\paperwidth]{#1}
