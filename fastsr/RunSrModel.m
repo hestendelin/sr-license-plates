@@ -33,7 +33,7 @@ end
 opt.img_source = img_source;
 
 opt.real_warps = opt.warps;
-%opt = rmfield(opt,'warps');
+opt = rmfield(opt,'warps');
 % here run FastSuperResolution
 result = FastSuperResolution(imgs, opt);
 

@@ -5,8 +5,8 @@ clear;
 img0 = imresize((im2double(imread('../plates/norm50/001.png'))),1);
 % img0 = imresize(img0,0.5);
 
-dxs = -0.2:0.1:2;
-dys = -0.2:0.1:1.2;
+dxs = -0.2:0.3:2;
+dys = -0.2:0.3:1.2;
 
 [gx,gy] = ndgrid(dxs, dys);
 result = zeros(length(dxs),length(dys));

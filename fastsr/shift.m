@@ -5,5 +5,5 @@ function image = shift(image, dy, dx)
     [ygrid,xgrid] = ndgrid(1:n,1:m);
 
     % cubic is better
-    image = interp2(ygrid',xgrid',image',ygrid-dy, xgrid-dx,'linear',0);
+    image = interp2(ygrid',xgrid',image',ygrid-dy, xgrid-dx,'cubic',0);
 end
