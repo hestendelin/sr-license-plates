@@ -75,6 +75,12 @@ where:
  $$ \tilde{x} = \underset{\hat{x}}{\operatorname{argmax}}~  PSNR(\hat{x},x)$$
 \end{frame}
 
+\begin{frame}{Subpixel motion}
+For subpixel motion we use bicubic interpolation between image pixels.
+
+In our experiments we use model with shift, gaussian blur and normal distributed noise.
+\end{frame}
+
 \section{Methods}
 \begin{frame}{Methods}
   \begin{itemize}
@@ -126,7 +132,7 @@ $$
 \mathrm{grad}(x, \gamma) = \frac{1}{\sigma^2} \sum^m_{r=1} W^T_R H^T_r D^T (D H_r W_r x-y_r) + \lambda \cdot G(x, \gamma)
 $$
 где $\lambda$experimentally chosen regularization parameter and the gradient to the point $ (i, j) $ is given by the
-following formula.
+following formula:
 
 $$
 \begin{array}{rcl}
@@ -136,8 +142,6 @@ $$
 & + & 2\left[x(i,j)-x(i-1,j)\right] \exp\left(-[ x(i,j)-x(i+1,j) ]^2/\gamma \right)
 \end{array}
 $$
-
-Note: in experiments we use warp \textbf{without} rotating (only shift)
 \end{frame}
 
 %\section{Описание подходов}
