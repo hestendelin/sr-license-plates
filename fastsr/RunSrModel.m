@@ -9,7 +9,7 @@ if ~isfield(opt, 'warps')          ; opt.warps = [0 0; 1 -1; 0.5 1; -1 -1]; end;
 opt.warps = opt.warps + opt.warp_noise .* randn(size(opt.warps));
 
 img_source = im2double(rgb2gray(imread(opt.file)));
-% увеличиваем границы нечетного изображения
+% СѓРІРµР»РёС‡РёРІР°РµРј РіСЂР°РЅРёС†С‹ РЅРµС‡РµС‚РЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 img_source = padarray(img_source,mod(size(img_source),2),'replicate','pre');
 
 % ceil(gaussian_sigma*2)*2+1
@@ -29,11 +29,12 @@ for war = 1:size(opt.warps,1)
     %imwrite(shifted, ['out\lr_' num2str(war) '.png']);
 end
 
-% для модели полезно.
+% РґР»СЏ РјРѕРґРµР»Рё РїРѕР»РµР·РЅРѕ.
 opt.img_source = img_source;
 
 opt.real_warps = opt.warps;
-opt = rmfield(opt,'warps');
+% РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ SubWarps
+% opt = rmfield(opt,'warps');
 % here run FastSuperResolution
 result = FastSuperResolution(imgs, opt);
 

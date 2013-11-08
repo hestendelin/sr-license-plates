@@ -13,6 +13,8 @@ if ~isfield (op, 'noise_level'   ); op.noise_level    = 0.0         ; end;
 if ~isfield (op, 'b_hide_fig'    ); op.b_hide_fig     = 0           ; end;
 if ~isfield (op, 'b_is_batch'    ); op.b_is_batch     = 0           ; end;
 
+result.opt = op;
+
 %fn = fieldnames(op);
 %for i = 1:length(fn)
 %    field_name = fn{1};
@@ -59,12 +61,12 @@ result.init = X;
 op.gamma = max([max(dx) max(dy)]);
 cont = true;
 n_step = 1;
-result.gamma_plot = []; result.nor_plot = []; result.psnr_plot = [];
+result.gamma_plot = []; result.nor_plot = []; result.psnr_plot = [];result.G_plot = [];
 
 if ~op.b_hide_fig
-    subplot(2,2,1);imshow(X);title('Начальное приближение');
+    subplot(2,2,1);imshow(X);title('РќР°С‡Р°Р»СЊРЅРѕРµ РїСЂРёР±Р»РёР¶РµРЅРёРµ');
     if isfield(op,'img_source')
-        subplot(2,2,3);imshow(op.img_source);title('Оригинальное изображение');
+        subplot(2,2,3);imshow(op.img_source);title('РћСЂРёРіРёРЅР°Р»СЊРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ');
     end
 end
 % imwrite(X,'combined.png')
@@ -79,8 +81,8 @@ while cont
         upsampled = upsampled + ...
             shift(imresize(diff_lr, op.scale, 'nearest'), -warps(im,1),-warps(im,2));
     end
-
-    upsampled = X - op.alpha * (upsampled*1/(op.noise_level +1)+ op.lambda * G(X, op.gamma) );
+    G_current = G(X, op.gamma);
+    upsampled = X - op.alpha * (upsampled*1/(op.noise_level +1)+ op.lambda * G_current );
 %    op.alpha = op.alpha*0.99;
     nor = norm(upsampled - X);
 
@@ -103,17 +105,18 @@ while cont
     % Plotting
     result.gamma_plot(end + 1) = op.gamma;
     result.nor_plot(end + 1) = nor;
+    result.G_plot(end + 1) = norm(G_current);
     if isfield(op,'img_source')
         result.psnr_plot(end + 1) = PSNR(op.img_source, X);
     end
 
     if ~op.b_is_batch
-        disp(['Итерация ' num2str(n_step) ', gamma=' num2str(op.gamma) ',norm=' num2str(nor)]);
+        disp(['РС‚РµСЂР°С†РёСЏ ' num2str(n_step) ', gamma=' num2str(op.gamma) ',norm=' num2str(nor)]);
     end
 
     if ~op.b_hide_fig
         % plot
-        subplot(2,2,2);imshow(uint8(255*X));title('Результат');
+        subplot(2,2,2);imshow(uint8(255*X));title('Р РµР·СѓР»СЊС‚Р°С‚');
         x_values = 1:(n_step-1);
         %subplot(2,2,3);plot(x_values, result.nor_plot);title('NORMA');
 
@@ -121,7 +124,7 @@ while cont
             subplot(2,2,4);plot(x_values, result.psnr_plot);title('PSNR');
             ylabel('PNSR dB');
         end
-        xlabel('Итерация');
+        xlabel('РС‚РµСЂР°С†РёСЏ');
         figure(result_figure);
     end
 end
