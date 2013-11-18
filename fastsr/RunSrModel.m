@@ -6,7 +6,6 @@ if ~isfield(opt, 'warp_noise')     ; opt.warp_noise     = 0                     
 if ~isfield(opt, 'file')           ; opt.file           = '../plates/norm70/003.png' ; end ;
 
 if ~isfield(opt, 'warps')          ; opt.warps = [0 0; 1 -1; 0.5 1; -1 -1]; end;
-opt.warps = opt.warps + opt.warp_noise .* randn(size(opt.warps));
 
 img_source = im2double(rgb2gray(imread(opt.file)));
 % увеличиваем границы нечетного изображения
@@ -33,6 +32,8 @@ end
 opt.img_source = img_source;
 
 opt.real_warps = opt.warps;
+opt.warps = opt.warps + opt.warp_noise .* randn(size(opt.warps));
+
 % для использование SubWarps
 % opt = rmfield(opt,'warps');
 % here run FastSuperResolution
