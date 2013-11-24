@@ -1,5 +1,20 @@
 git config core.autocrlf input
+
+* text eol=crlf
+
 *.lyx text eol=lf
 
 *.bash text eol=lf
 *.zsh text eol=lf
+
+
+*.pdf binary
+*.jpg binary
+*.png binary
+*.gif binary
+*.mat binary
+*.doc binary
+*.7z binary
+*.docx binary
+*.dll binary
+*.mex* binary
